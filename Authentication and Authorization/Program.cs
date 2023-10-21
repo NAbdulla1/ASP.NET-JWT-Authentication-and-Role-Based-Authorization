@@ -22,6 +22,21 @@ builder.Services
     })
     .AddJwtBearer(options => options.Configure(builder));
 
+const string AllowPostmanImportAndLocalhost = "AllowPostmanImportAndLocalhost";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: AllowPostmanImportAndLocalhost,
+        policy =>
+        {
+            policy
+                .WithOrigins("https://web.postman.co", "http://localhost:5231", "https://localhost:7059")
+                .WithHeaders("Content-Type")
+                .AllowCredentials();
+        });
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -30,6 +45,8 @@ builder.Services.RegisterServices();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseCors(AllowPostmanImportAndLocalhost);
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
