@@ -2,9 +2,9 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Authentication_and_Authorization
+namespace Authentication_and_Authorization.Services
 {
-    public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
+    public class SwaggerOptionsConfigService : IConfigureOptions<SwaggerGenOptions>
     {
         public void Configure(SwaggerGenOptions options)
         {

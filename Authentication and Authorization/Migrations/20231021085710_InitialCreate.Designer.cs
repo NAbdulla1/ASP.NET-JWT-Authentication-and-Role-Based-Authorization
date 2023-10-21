@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Authentication_and_Authorization.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(UserAccountContext))]
     [Migration("20231021085710_InitialCreate")]
     partial class InitialCreate
     {
