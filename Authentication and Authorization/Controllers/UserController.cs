@@ -3,6 +3,7 @@ using Authentication_and_Authorization.Data.Entities;
 using Authentication_and_Authorization.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -26,6 +27,11 @@ namespace Authentication_and_Authorization.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> Register([Bind("Email,Password")] User user)
         {
+            if(await _dbContext.users.Where(u => u.Email == user.Email).FirstOrDefaultAsync() != null)
+            {
+                return BadRequest();
+            }
+
             user.UserType = UserType.Customer;
             _dbContext.users.Add(user);
             await _dbContext.SaveChangesAsync();
