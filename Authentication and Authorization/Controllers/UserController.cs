@@ -57,7 +57,7 @@ namespace Authentication_and_Authorization.Controllers
                 new Claim(JwtRegisteredClaimNames.Iat, EpochTime.GetIntDate(nowUtc).ToString(), ClaimValueTypes.Integer64),
                 new Claim("UserId", user.Id.ToString()),
                 new Claim("Email", user.Email),
-                new Claim("UserType", user.UserType.ToString())
+                new Claim(ClaimTypes.Role, user.UserType.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityToken:Key"]));
@@ -73,15 +73,23 @@ namespace Authentication_and_Authorization.Controllers
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-
             return Ok(new AccessToken { Token = tokenString });
         }
 
         [HttpGet]
-        [Authorize]
-        public IActionResult TestAuth()
+        [Route("admin-test")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult TestAdminAuthenticationAndAuthentication()
         {
-            return Ok(new { msg = "Authenticated" });
+            return Ok(new { msg = "Authenticated user and Authorized the user as an Admin." });
+        }
+
+        [HttpGet]
+        [Route("customer-test")]
+        [Authorize(Roles = "Customer")]
+        public IActionResult TestCustomerAuthenticationAndAuthentication()
+        {
+            return Ok(new { msg = "Authenticated user and Authorized the user as a Customer." });
         }
     }
 }
