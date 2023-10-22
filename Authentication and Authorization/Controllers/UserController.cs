@@ -23,6 +23,15 @@ namespace Authentication_and_Authorization.Controllers
             _jsonWebTokenService = jsonWebTokenService;
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult<IEnumerable<UserDTO>> GetUsers()
+        {
+            var users = _dbContext.Users.AsEnumerable().Select(user => ToUserDTO(user));
+
+            return Ok(users);
+        }
+
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register([Bind("Email,Password")] User user)
         {
