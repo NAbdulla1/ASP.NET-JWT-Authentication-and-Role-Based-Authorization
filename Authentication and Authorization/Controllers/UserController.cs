@@ -28,7 +28,7 @@ namespace Authentication_and_Authorization.Controllers
         {
             if (await _dbContext.Users.Where(u => u.Email == user.Email).FirstOrDefaultAsync() != null)
             {
-                ModelState.AddModelError("Email", $"An user already exists with the email '{user.Email}'.");
+                ModelState.AddModelError(nameof(user.Email), $"An user already exists with the email '{user.Email}'.");
 
                 return ValidationProblem();
             }
