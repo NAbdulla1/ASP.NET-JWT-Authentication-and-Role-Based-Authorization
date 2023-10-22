@@ -26,9 +26,11 @@ namespace Authentication_and_Authorization.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> Register([Bind("Email,Password")] User user)
         {
-            if(await _dbContext.Users.Where(u => u.Email == user.Email).FirstOrDefaultAsync() != null)
+            if (await _dbContext.Users.Where(u => u.Email == user.Email).FirstOrDefaultAsync() != null)
             {
-                return BadRequest();
+                ModelState.AddModelError("Email", $"An user already exists with the email '{user.Email}'.");
+
+                return ValidationProblem();
             }
 
             user.UserType = UserType.Customer;
