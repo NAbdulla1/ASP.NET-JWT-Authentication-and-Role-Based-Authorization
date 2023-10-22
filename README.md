@@ -10,3 +10,22 @@ content as follow:
   }
 }
 ```
+
+## Run the project
+### Migrate Database
+- Update the database connection string in the `appsettings.json`(or `appsettings.Development.json`) to point to a MSSQL database.
+- Install Entity Framework tool(if it is not already installed): `dotnet tool install --global dotnet-ef`.
+- Run `dotnet ef dbcontext info` to check if the database connection string is in proper shape.
+- Run `dotnet ef database update` to apply the migrations and create the tables.
+- Run `dotnet run` to run the project.
+
+### Initial Admin user
+An admin user is created automatically at the first time run of the project.
+- Email: admin@email.com
+- Password: 1234
+
+On the call to `/api/user/register` route, new customers will be created.
+
+Admin and customer can login using the `/api/user/login` route.
+
+Test authentication and authorization using the other two routes.

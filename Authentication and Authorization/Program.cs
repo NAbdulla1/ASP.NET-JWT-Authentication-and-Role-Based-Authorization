@@ -1,4 +1,5 @@
 using Authentication_and_Authorization.Data;
+using Authentication_and_Authorization.Data.Seeds;
 using Authentication_and_Authorization.ExtensionMethods;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.RegisterServices();
 
 var app = builder.Build();
+
+using(var scope = app.Services.CreateScope())
+{
+    AdminSeeder.Initialize(scope.ServiceProvider);
+}
 
 // Configure the HTTP request pipeline.
 app.UseCors(AllowPostmanImportAndLocalhost);
