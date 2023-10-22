@@ -29,5 +29,3 @@ On the call to `/api/user/register` route, new customers will be created.
 Admin and customer can login using the `/api/user/login` route.
 
 Test authentication and authorization using the other two routes.
-
-[Find in Postman](https://api.postman.com/collections/15225143-71bdbec4-4cbe-44c6-ab88-0b6c5e22e38b?access_key=PMAT-01HDCAWM156SJYDVPM82XP3VB9)
