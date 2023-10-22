@@ -24,7 +24,7 @@ namespace Authentication_and_Authorization.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> Register([Bind("Email,Password")] User user)
+        public async Task<ActionResult<UserDTO>> Register([Bind("Email,Password")] User user)
         {
             if (await _dbContext.Users.Where(u => u.Email == user.Email).FirstOrDefaultAsync() != null)
             {
@@ -37,7 +37,17 @@ namespace Authentication_and_Authorization.Controllers
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(Register), user);
+            return CreatedAtAction(nameof(Register), ToUserDTO(user));
+        }
+
+        private static UserDTO ToUserDTO(User user)
+        {
+            return new UserDTO
+            {
+                Email = user.Email,
+                Id = user.Id,
+                UserType = user.UserType.ToString()
+            };
         }
 
         [HttpPost("login")]
