@@ -1,4 +1,4 @@
-﻿using Authentication_and_Authorization.Models;
+﻿using Authentication_and_Authorization.Core.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;

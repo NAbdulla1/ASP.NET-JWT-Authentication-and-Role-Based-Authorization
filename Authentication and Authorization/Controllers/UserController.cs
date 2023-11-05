@@ -1,10 +1,9 @@
-﻿using Authentication_and_Authorization.Data;
-using Authentication_and_Authorization.Data.Entities;
-using Authentication_and_Authorization.Models;
-using Authentication_and_Authorization.Services;
+﻿using Authentication_and_Authorization.Core.DTOs;
+using Authentication_and_Authorization.Core.Models;
+using Authentication_and_Authorization.Core.Services;
+using Authentication_and_Authorization.Core.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Authentication_and_Authorization.Controllers
 {
@@ -12,65 +11,75 @@ namespace Authentication_and_Authorization.Controllers
     [Route("api/users")]
     public class UserController : Controller
     {
-        private readonly UserAccountContext _dbContext;
-        private readonly IJsonWebTokenService _jsonWebTokenService;
-        private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
+        private readonly IAuthService _authService;
 
-        public UserController(UserAccountContext dbContext, IJsonWebTokenService jsonWebTokenService, IConfiguration configuration)
+        public UserController(
+            IUserService userService,
+            IAuthService authService)
         {
-            _dbContext = dbContext;
-            _configuration = configuration;
-            _jsonWebTokenService = jsonWebTokenService;
+            _userService = userService;
+            _authService = authService;
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public ActionResult<IEnumerable<UserDTO>> GetUsers()
+        public async Task<ActionResult<PageDTO<UserDTO>>> GetUsers([FromQuery] IndexDTO indexData, string? searchTerm)
         {
-            var users = _dbContext.Users.AsEnumerable().Select(user => ToUserDTO(user));
+            var userPage = await _userService.GetAll(indexData, searchTerm);
 
-            return Ok(users);
+            return Ok(userPage);
+        }
+
+        [HttpGet("{id:long}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserDTO>> GetUser(long id)
+        {
+            var user = await _userService.Get(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserDTO>> Register([Bind("Email,Password")] User user)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UserDTO>> Register(UserRegisterDTO user)
         {
-            if (await _dbContext.Users.Where(u => u.Email == user.Email).FirstOrDefaultAsync() != null)
+            try
             {
-                ModelState.AddModelError(nameof(user.Email), $"An user already exists with the email '{user.Email}'.");
+                var newUser = await _userService.CreateCustomer(user);
 
+                return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, newUser);
+            }
+            catch (UserWithEmailAlreadyExistsException ex)
+            {
+                ModelState.AddModelError(nameof(user.Email), ex.Message);
                 return ValidationProblem();
             }
-
-            user.UserType = UserType.Customer;
-            _dbContext.Users.Add(user);
-            await _dbContext.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(Register), ToUserDTO(user));
-        }
-
-        private static UserDTO ToUserDTO(User user)
-        {
-            return new UserDTO
-            {
-                Email = user.Email,
-                Id = user.Id,
-                UserType = user.UserType.ToString()
-            };
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<AccessToken>> Login([Bind("Email,Password")] User loginUser)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<AccessToken>> Login(LoginUserDTO loginUserDTO)
         {
-            var user = await _dbContext.Users.Where(u => u.Email == loginUser.Email).FirstOrDefaultAsync();
-            if (user == null || user.Password != loginUser.Password)
+            try
             {
-                return Unauthorized();
+                var accessToken = await _authService.LoginUser(loginUserDTO);
+
+                return Ok(accessToken);
             }
-
-            string tokenString = _jsonWebTokenService.CreateToken(user);
-
-            return Ok(new AccessToken { Token = tokenString });
+            catch (UnauthenticatedUserException ex)
+            {
+                return Problem(title: ex.Message, statusCode: StatusCodes.Status401Unauthorized);
+            }
         }
 
         [HttpGet]

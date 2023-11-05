@@ -1,4 +1,4 @@
-﻿using Authentication_and_Authorization.Data.DTOs;
+﻿using Authentication_and_Authorization.Data.Query;
 using Authentication_and_Authorization.Data.Entities;
 
 namespace Authentication_and_Authorization.Data.Repositories

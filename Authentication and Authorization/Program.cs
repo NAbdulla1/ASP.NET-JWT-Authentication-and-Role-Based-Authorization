@@ -1,6 +1,7 @@
+using Authentication_and_Authorization.Core.Seeds;
 using Authentication_and_Authorization.Data;
-using Authentication_and_Authorization.Data.Seeds;
 using Authentication_and_Authorization.ExtensionMethods;
+using Authentication_and_Authorization.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,7 +48,7 @@ var app = builder.Build();
 
 using(var scope = app.Services.CreateScope())
 {
-    AdminSeeder.Initialize(scope.ServiceProvider);
+    await AdminSeeder.Initialize(scope.ServiceProvider);
 }
 
 // Configure the HTTP request pipeline.

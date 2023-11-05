@@ -1,4 +1,4 @@
-﻿namespace Authentication_and_Authorization.Models
+﻿namespace Authentication_and_Authorization.Core.Models
 {
     public class JWTConfig
     {

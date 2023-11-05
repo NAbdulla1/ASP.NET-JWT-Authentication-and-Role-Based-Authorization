@@ -5,5 +5,6 @@ namespace Authentication_and_Authorization.Data.Repositories
     public interface IUserRepository : IRepository<User>
     {
         Task<bool> HasAnyAdmin();
+        Task<User?> GetByEmail(string email);
     }
 }

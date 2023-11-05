@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Authentication_and_Authorization.Services
+namespace Authentication_and_Authorization.Core.Services
 {
     public class SwaggerOptionsConfigService : IConfigureOptions<SwaggerGenOptions>
     {

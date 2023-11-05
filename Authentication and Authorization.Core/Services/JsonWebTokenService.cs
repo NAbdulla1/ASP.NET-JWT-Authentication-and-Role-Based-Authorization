@@ -1,11 +1,12 @@
-﻿using Authentication_and_Authorization.Data.Entities;
-using Authentication_and_Authorization.Models;
+﻿using Authentication_and_Authorization.Core.Models;
+using Authentication_and_Authorization.Data.Entities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Authentication_and_Authorization.Services
+namespace Authentication_and_Authorization.Core.Services
 {
     public interface IJsonWebTokenService
     {
