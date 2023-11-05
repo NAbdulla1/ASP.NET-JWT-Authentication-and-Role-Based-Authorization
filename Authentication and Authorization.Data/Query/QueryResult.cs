@@ -1,6 +1,6 @@
 ﻿using Authentication_and_Authorization.Data.Entities;
 
-namespace Authentication_and_Authorization.Data.DTOs
+namespace Authentication_and_Authorization.Data.Query
 {
     public class QueryResult<TEntity> where TEntity : EntityBase
     {
