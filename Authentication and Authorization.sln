@@ -10,9 +10,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication and Authorization.Data", "Authentication and Authorization.Data\Authentication and Authorization.Data.csproj", "{987F6079-0505-4674-AF4C-4AA4472D90FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authentication and Authorization.Data", "Authentication and Authorization.Data\Authentication and Authorization.Data.csproj", "{987F6079-0505-4674-AF4C-4AA4472D90FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication and Authorization.Core", "Authentication and Authorization.Core\Authentication and Authorization.Core.csproj", "{CA78EC87-86EB-432C-8B3D-B8D70D8866D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authentication and Authorization.Core", "Authentication and Authorization.Core\Authentication and Authorization.Core.csproj", "{CA78EC87-86EB-432C-8B3D-B8D70D8866D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication and Authorization.Data.InMemory", "Authentication and Authorization.Data.InMemory\Authentication and Authorization.Data.InMemory.csproj", "{AB5D3548-780C-41DA-BFF4-6F746269F2E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{CA78EC87-86EB-432C-8B3D-B8D70D8866D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA78EC87-86EB-432C-8B3D-B8D70D8866D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA78EC87-86EB-432C-8B3D-B8D70D8866D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB5D3548-780C-41DA-BFF4-6F746269F2E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB5D3548-780C-41DA-BFF4-6F746269F2E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB5D3548-780C-41DA-BFF4-6F746269F2E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB5D3548-780C-41DA-BFF4-6F746269F2E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

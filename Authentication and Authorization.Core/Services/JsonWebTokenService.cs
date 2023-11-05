@@ -24,13 +24,14 @@ namespace Authentication_and_Authorization.Core.Services
         public string CreateToken(User user)
         {
             var nowUtc = DateTime.UtcNow;
-            var expirationDuration = TimeSpan.FromMinutes(2);
+            var expirationDuration = TimeSpan.FromMinutes(20);
             var expirationUtc = nowUtc.Add(expirationDuration);
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, _jwtConfig.Subject),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, EpochTime.GetIntDate(nowUtc).ToString(), ClaimValueTypes.Integer64),
+                new Claim(JwtRegisteredClaimNames.Exp, EpochTime.GetIntDate(expirationUtc).ToString(), ClaimValueTypes.Integer64),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.UserType.ToString())
@@ -43,7 +44,6 @@ namespace Authentication_and_Authorization.Core.Services
                 issuer: _jwtConfig.Issuer,
                 audience: _jwtConfig.Audience,
                 claims: claims,
-                expires: expirationUtc,
                 signingCredentials: signingCred
             );
 

@@ -1,4 +1,5 @@
 ﻿using Authentication_and_Authorization.Core.Models;
+using Authentication_and_Authorization.Data.InMemory.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -20,6 +21,19 @@ namespace Authentication_and_Authorization.ExtensionMethods
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
+            };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnTokenValidated = async (context) =>
+                {
+                    var token = context.Request.Headers.Authorization.ToString();
+                    var blockedJWTRepo = context.HttpContext.RequestServices.GetRequiredService<IBlockedJWTRepository>();
+                    if (token != null && await blockedJWTRepo.IsJWTBlocked(token))
+                    {
+                        context.Fail(new Exception("Bearer token is blocked after logout."));
+                    }
+                }
             };
         }
     }
